@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ведерникова Анна" />
+    <meta name="description" content="Лабораторная работа №1" />
+    <meta
+      name="keywords"
+      content="попадание точки в заданную область, лабораторная работа по веб-программированию"
+    />
+
+    <title>Лабораторная работа №1 по веб-программированию</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header id="site-header">
+      <h2>Автор: Ведерникова Анна Васильевна</h2>
+      <h2>Группа: P3209</h2>
+      <h2>Вариант: 471800</h2>
+    </header>
+    <main id="main-content">
+      <form>
+        <div class="users-choice">
+          <label>Выберите X</label>
+          <div class="choice-x">
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="-5" />
+              <div class="checkbox">
+                <span>-5</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="-4" />
+              <div class="checkbox">
+                <span>-4</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="-3" />
+              <div class="checkbox">
+                <span>-3</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="-2" />
+              <div class="checkbox">
+                <span>-2</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="-1" />
+              <div class="checkbox">
+                <span>-1</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="0" />
+              <div class="checkbox">
+                <span>0</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="1" />
+              <div class="checkbox">
+                <span>1</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="2" />
+              <div class="checkbox">
+                <span>2</span>
+              </div>
+            </label>
+            <label class="castom-checkbox">
+              <input type="checkbox" name="hidden-checkbox" value="3" />
+              <div class="checkbox">
+                <span>3</span>
+              </div>
+            </label>
+            <br /><br />
+          </div>
+
+          <div class="choice-y">
+            <label>Введите Y</label>
+            <label>
+              <input
+                type="text"
+                placeholder="Введите значение от -3 до 5"
+                maxlength="2"
+                name="y"
+                required
+              />
+            </label>
+            <span id="errorMessage" style="color: red"></span>
+          </div>
+
+          <label>Выберите R</label>
+          <div class="choice-r">
+            <label class="castom-radio">
+              <input type="radio" name="hidden-radio" value="1" />
+              <div class="radio">
+                <span>1</span>
+              </div>
+            </label>
+            <label class="castom-radio">
+              <input type="radio" name="hidden-radio" value="1.5" />
+              <div class="radio">
+                <span>1.5</span>
+              </div>
+            </label>
+            <label class="castom-radio">
+              <input type="radio" name="hidden-radio" value="2" />
+              <div class="radio">
+                <span>2</span>
+              </div>
+            </label>
+            <label class="castom-radio">
+              <input type="radio" name="hidden-radio" value="2.5" />
+              <div class="radio">
+                <span>2.5</span>
+              </div>
+            </label>
+            <label class="castom-radio">
+              <input type="radio" name="hidden-radio" value="3" />
+              <div class="radio">
+                <span>3</span>
+              </div>
+            </label>
+          </div>
+          <div class="helper">
+            <input type="submit" value="Отправить" class="btn" />
+            <input type="reset" name="" value="Очистить" /><br /><br />
+          </div>
+        </div>
+      </form>
+      <form>
+        <div class="graph">
+          <p>Координатная плоскость:</p>
+          <svg width="300px" height="350px">
+            <!-- Оси -->
+            <line x1="0" x2="300" y1="150" y2="150"></line>
+            <line x1="150" x2="150" y1="0" y2="300"></line>
+            <text x="285" y="135">X</text>
+            <text x="160" y="15">Y</text>
+            <polygon points="150,0 145,15 155,15"></polygon>
+            <polygon points="300,150 285,145 285,155"></polygon>
+            <!-- Фигуры -->
+            <polygon
+              points="150,150 100,150 100,50 150,50"
+              fill="#d3e0e7"
+            ></polygon>
+            <path
+              d="M 150 150 L 200 150 C 200 180 180 200 150 200 Z"
+              fill="#d3e0e7"
+            ></path>
+            <polygon points="150,150 250,150 150,100" fill="#d3e0e7"></polygon>
+            <!-- Палочки -->
+            <line x1="50" x2="50" y1="143" y2="157"></line>
+            <line x1="100" x2="100" y1="143" y2="157"></line>
+            <line x1="200" x2="200" y1="143" y2="157"></line>
+            <line x1="250" x2="250" y1="143" y2="157"></line>
+            <line x1="143" x2="157" y1="50" y2="50"></line>
+            <line x1="143" x2="157" y1="100" y2="100"></line>
+            <line x1="143" x2="157" y1="200" y2="200"></line>
+            <line x1="143" x2="157" y1="250" y2="250"></line>
+            <!-- Значения R на оси X -->
+            <text x="40" y="138">-R</text>
+            <text x="85" y="138">-R/2</text>
+            <text x="190" y="138">R/2</text>
+            <text x="245" y="138">R</text>
+            <!-- Значения R на оси Y -->
+            <text x="162" y="54">R</text>
+            <text x="162" y="104">R/2</text>
+            <text x="162" y="204">-R/2</text>
+            <text x="162" y="254">-R</text>
+            <!-- Точка -->
+            <circle
+              id="dot"
+              cx="150"
+              cy="150"
+              r="5"
+              fill="#db375a"
+              style="display: none"
+            />
+          </svg>
+        </div>
+      </form>
+      <form class="validation-info">
+        <table id="table">
+          <thead>
+            <tr>
+              <th>X</th>
+              <th>Y</th>
+              <th>R</th>
+              <th>Текущее время</th>
+              <th>Время работы скрипта</th>
+              <th>Результат</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button type="button" onclick="clearHistory()" id="clean-table-button">
+          <img src="images/clean.png" height="45px" />
+        </button>
+      </form>
+      <script src="checkForm.js"></script>
+    </main>
+    <footer id="site-footer"></footer>
+  </body>
+</html>

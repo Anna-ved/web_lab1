@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f3e5dc;
+  font-family: 'Cormorant Garamond', serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 24px;
+}
+
+#site-header {
+  height: 120px;
+  width: 100%;
+  background: #90b267;
+  color: #f3e5dc;
+  text-align: center;
+  font-size: 18px;
+  opacity: 0.9;
+  padding: 15px;
+  margin-bottom: 40px;
+  border-bottom: 10px double #f3e5dc;
+}
+
+#main-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1%;
+}
+
+.users-choice,
+.graph {
+  border: 7px double #f2b8c5;
+  width: 570px;
+  min-height: 50px;
+  height: auto;
+  overflow: visible;
+  border-radius: 8px;
+  margin-left: 80px;
+  margin-top: 40px;
+  padding: 1%;
+  text-align: center;
+  font-family: Lora, serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  color: #90b267;
+}
+
+.castom-checkbox,
+.castom-radio {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  display: none;
+  position: absolute;
+}
+
+.castom-checkbox .checkbox,
+.castom-radio .radio {
+  border: 3px solid #f2b8c5;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  position: relative;
+  color: #90b267;
+  margin-top: 8px;
+}
+
+.castom-checkbox span,
+.castom-radio span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 26px;
+  font-family: Lora, serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+}
+
+.castom-checkbox .checkbox:hover {
+  background: #f8f0f4;
+}
+
+.castom-checkbox input:checked + .checkbox {
+  background: #d3e0e7;
+  border: 0;
+  width: 49px;
+  height: 49px;
+  color: #f2b8c5;
+}
+
+.castom-radio .radio:hover {
+  background: #f8f0f4;
+}
+
+.castom-radio input:checked + .radio {
+  background: #d3e0e7;
+  border: 0;
+  width: 49px;
+  height: 49px;
+  color: #f2b8c5;
+}
+
+.choice-y {
+  margin-bottom: 25px;
+}
+
+.choice-y input {
+  position: relative;
+  width: 370px;
+  height: 40px;
+  border-radius: 20px;
+  border: 3px solid #f2b8c5;
+  background: #f3e5dc;
+  font-size: 26px;
+  padding: 0 18px;
+  font-family: Lora, serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  color: #90b267;
+}
+
+.users-choice .helper input {
+  background: #d3e0e7;
+  border: 0;
+  border-radius: 20px;
+  width: 180px;
+  height: 40px;
+  color: #f2b8c5;
+  font-family: Lora, serif;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.users-choice .helper input:hover {
+  background: #f2b8c5;
+  color: #d3e0e7;
+}
+
+.graph {
+  margin-bottom: 10px;
+  margin-right: 80px;
+  width: 400px; /* Увеличиваем ширину */
+  height: 370px;
+  text-align: center;
+  padding: 2.5%;
+}
+
+.graph p {
+  margin-bottom: 15px;
+}
+
+.graph svg {
+  stroke: #90b267;
+  fill: #90b267;
+  font-size: 0.9rem;
+}
+
+.validation-info {
+  margin: 30px;
+  width: 80%;
+  height: auto;
+  font-size: 110%;
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+
+#table {
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  border-collapse: collapse;
+  margin: 25px 40px 25px 0;
+  min-width: 400px;
+  table-layout: auto;
+  font-family: Lora, serif;
+  font-size: 20px;
+}
+
+#table thead tr {
+  background-color: #f2b8c5;
+  color: #90b267;
+  text-align: center;
+  font-weight: bold;
+}
+
+#table th,
+#table td {
+  padding: 12px 15px;
+}
+
+#table tbody tr {
+  border-bottom: 2px solid #f2b8c5;
+  color: #90b267;
+}
+
+#clean-table-button {
+  background: #d3e0e7;
+  border-radius: 5px;
+  border: #d3e0e7;
+  width: 60px;
+  height: 60px;
+  align-self: center;
+}
