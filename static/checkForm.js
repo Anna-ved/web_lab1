@@ -1,13 +1,19 @@
 let reg = /^(-3|-2|-1|0|[1-5])$/;
 let input = document.querySelector('input[name="y"]');
 let span = document.querySelector('#errorMessage');
+
+// Загружаем сохраненные результаты при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedResults();
+});
+
 document.querySelector('.btn').onclick = function(e){
     e.preventDefault();
     if(!validate(reg, input.value)){
-        notValid(input, span, 'Вы должны ввести цифру от -3 до 5');
+        notValid(input, span, 'Вы должны ввести целое число от -3 до 5');
     }else{
         valid(input, span, '');
-        getResponse(e); // Передаем событие в функцию
+        getResponse(e);
     }
 }
 
@@ -37,6 +43,7 @@ function handleCheckbox(clickedCheckbox) {
         });
     }
 }
+
 async function getResponse(ev){
     ev.preventDefault();
 
@@ -46,7 +53,7 @@ async function getResponse(ev){
         const rRadio = document.querySelector('input[name="hidden-radio"]:checked');
 
         if (!xCheckbox || !yInput || !rRadio) {
-            alert('Пожалуйста, заполните все поля');
+            notValid(input, span, 'Пожалуйста, заполните все поля');
             return;
         }
 
@@ -77,14 +84,61 @@ async function getResponse(ev){
         localStorage.setItem("session", answer);
         var res = JSON.parse(answer);
 
-        console.log('Полный ответ от сервера:', res); // Для отладки
+        console.log('Полный ответ от сервера:', res);
 
-        var table = document.getElementById("table");
-        var tbody = table.getElementsByTagName("tbody")[0];
+        if (res.error === 'all ok') {
+            valid(input, span, '');
 
+            const currentData = res.current;
+            saveResultToStorage({
+                x: currentData.x || x,
+                y: currentData.y || y,
+                r: currentData.r || r,
+                timestamp: currentData.timestamp || new Date().toLocaleString(),
+                workTime: currentData.workTime || 0,
+                hit: currentData.hit || false
+            });
+
+            updateTable();
+            updateDotPosition(currentData.x || x, currentData.y || y, currentData.r || r);
+
+        } else {
+            console.error('Ошибка сервера: ' + (res.error || 'Неизвестная ошибка'));
+        }
+
+    } catch (error) {
+        console.error(`Ошибка: ${error.message}`);
+    }
+}
+
+// Функция для сохранения результата в localStorage
+function saveResultToStorage(resultData) {
+    let savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
+    savedResults.unshift(resultData);
+
+    if (savedResults.length > 100) {
+        savedResults = savedResults.slice(0, 100);
+    }
+
+    localStorage.setItem('savedResults', JSON.stringify(savedResults));
+}
+
+function loadSavedResults() {
+    const savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
+
+    if (savedResults.length > 0) {
+        updateTable();
+    }
+}
+
+function updateTable() {
+    const savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
+    var table = document.getElementById("table");
+    var tbody = table.getElementsByTagName("tbody")[0];
+
+    tbody.innerHTML = '';
+    savedResults.forEach(result => {
         var row = document.createElement("tr");
-
-        // Создаем ячейки
         var xCell = document.createElement("td");
         var yCell = document.createElement("td");
         var rCell = document.createElement("td");
@@ -92,48 +146,30 @@ async function getResponse(ev){
         var worktimeCell = document.createElement("td");
         var isHitCell = document.createElement("td");
 
-        if (res.error === 'all ok') {
-            valid(input, span, '');
+        xCell.innerText = result.x;
+        yCell.innerText = result.y;
+        rCell.innerText = result.r;
+        timeCell.innerText = result.timestamp;
+        worktimeCell.innerText = result.workTime ? result.workTime + ' мс' : '0 мс';
 
-            // ✅ ИСПРАВЛЕНИЕ: берем данные из res.current, а не из res
-            const currentData = res.current;
-
-            // Заполняем ячейки данными из current
-            xCell.innerText = currentData.x || x;
-            yCell.innerText = currentData.y || y;
-            rCell.innerText = currentData.r || r;
-            timeCell.innerText = currentData.timestamp || new Date().toLocaleString();
-            worktimeCell.innerText = res.workTime ? res.workTime + ' мс' : '0 мс';
-
-            // Используем hit из currentData
-            if (currentData.hit === true) {
-                isHitCell.innerText = "✓";
-                isHitCell.style.color = "green";
-                isHitCell.style.fontWeight = "bold";
-            } else {
-                isHitCell.innerText = "✗";
-                isHitCell.style.color = "red";
-                isHitCell.style.fontWeight = "bold";
-            }
-
-            // Правильный порядок ячеек
-            row.appendChild(xCell);      // X
-            row.appendChild(yCell);      // Y
-            row.appendChild(rCell);      // R
-            row.appendChild(timeCell);   // Время
-            row.appendChild(worktimeCell); // Время работы
-            row.appendChild(isHitCell);  // Результат
-            tbody.appendChild(row);
-            updateDotPosition(currentData.x || x, currentData.y || y, currentData.r || r);
-
+        if (result.hit === true) {
+            isHitCell.innerText = "✓";
+            isHitCell.style.color = "green";
+            isHitCell.style.fontWeight = "bold";
         } else {
-            alert('Ошибка сервера: ' + (res.error || 'Неизвестная ошибка'));
+            isHitCell.innerText = "✗";
+            isHitCell.style.color = "red";
+            isHitCell.style.fontWeight = "bold";
         }
+        row.appendChild(xCell);
+        row.appendChild(yCell);
+        row.appendChild(rCell);
+        row.appendChild(timeCell);
+        row.appendChild(worktimeCell);
+        row.appendChild(isHitCell);
 
-    } catch (error) {
-        console.error('Ошибка запроса:', error);
-        alert(`Ошибка: ${error.message}`);
-    }
+        tbody.appendChild(row);
+    });
 }
 
 function updateDotPosition(x, y, r) {
@@ -146,4 +182,11 @@ function updateDotPosition(x, y, r) {
     dot.setAttribute("cx", svgX);
     dot.setAttribute("cy", svgY);
     dot.style.display = 'block';
+}
+
+function clearHistory() {
+    if (confirm('Вы уверены, что хотите очистить историю результатов?')) {
+        localStorage.removeItem('savedResults');
+        updateTable(); // Обновляем таблицу (очищаем её)
+    }
 }

@@ -129,8 +129,8 @@ input[type="radio"], input[type="checkbox"]{
 .graph{
   margin-bottom: 10px;
   margin-right: 80px;
-  width: 310px;
-  height: 370px;
+    width: 400px; /* Увеличиваем ширину */
+    height: 370px;
   text-align: center;
   padding: 2.5%;
 }
@@ -154,13 +154,13 @@ input[type="radio"], input[type="checkbox"]{
 }
 
 #table{
-  width: 100%;
-  text-align: center;
-  vertical-align: middle;
-  border-collapse: collapse;
-  margin: 25px 0;
-  min-width: 400px;
-  table-layout: auto;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+    margin: 25px 40px 25px 0;
+    min-width: 400px;
+    table-layout: auto;
     font-family: "Lora", serif;
     font-size: 20px;
 }
@@ -179,4 +179,12 @@ input[type="radio"], input[type="checkbox"]{
 #table tbody tr{
   border-bottom: 2px solid #f2b8c5;
   color: #90b267;
+}
+#clean-table-button{
+    background: #d3e0e7;
+    border-radius: 5px;
+    border: #d3e0e7;
+    width: 60px;
+    height: 60px;
+    align-self: center;
 }
