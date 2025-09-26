@@ -53,8 +53,6 @@ public class HitCheckFCGIServer {
             }
 
             boolean hit = checkHit(x, y, r);
-
-            // Вычисляем время выполнения с полной точностью
             long endTime = System.nanoTime();
             double workTime = (endTime - startTime) / 1000000.0; // в миллисекундах
 
@@ -83,10 +81,8 @@ public class HitCheckFCGIServer {
             content.append("    \"y\": \"").append((String)currentResult.get("y")).append("\",\n");
             content.append("    \"hit\": ").append((String)currentResult.get("hit")).append(",\n");
             content.append("    \"timestamp\": \"").append((String)currentResult.get("timestamp")).append("\",\n");
-            // WorkTime с полной точностью (без форматирования)
             content.append("    \"workTime\": ").append(workTime).append("\n");
             content.append("  },\n");
-            // Убрана history
             content.append("  \"error\": \"all ok\"\n");
             content.append("}");
 
