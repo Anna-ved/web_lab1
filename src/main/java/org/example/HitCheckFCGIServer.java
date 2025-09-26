@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package org.example;
 
 import com.fastcgi.FCGIInterface;
@@ -11,15 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class HitCheckFCGIServer {
-    private static final Queue<Map<String, String>> queue = new ConcurrentLinkedQueue();
-    private static final int MaxHistory = 10;
 
     public static void main(String[] args) {
         FCGIInterface fcgi = new FCGIInterface();
@@ -36,7 +25,6 @@ public class HitCheckFCGIServer {
                 sendError("Internal server error");
             }
         }
-
     }
 
     public static void processRequest(long startTime) {
@@ -59,35 +47,33 @@ public class HitCheckFCGIServer {
             double r = Double.parseDouble(rStr);
             double x = Double.parseDouble(xStr);
             double y = Double.parseDouble(yStr);
-            if (r < (double)0.0F) {
+            if (r < 0.0) {
                 sendError("R are not valid");
                 return;
             }
 
             boolean hit = checkHit(x, y, r);
+
+            // Вычисляем время выполнения с полной точностью
+            long endTime = System.nanoTime();
+            double workTime = (endTime - startTime) / 1000000.0; // в миллисекундах
+
             Map<String, String> result = new HashMap();
             result.put("r", rStr);
             result.put("x", xStr);
             result.put("y", yStr);
             result.put("hit", Boolean.toString(hit));
             result.put("timestamp", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
-            synchronized(queue) {
-                queue.add(result);
-                if (queue.size() > 10) {
-                    queue.poll();
-                }
-            }
 
-            sendJsonResponse(result, startTime);
+            sendJsonResponse(result, workTime);
         } catch (NumberFormatException var18) {
             sendError("Invalid number format");
         } catch (Exception var19) {
             sendError("Processing error");
         }
-
     }
 
-    private static void sendJsonResponse(Map<String, String> currentResult, long startTime) {
+    private static void sendJsonResponse(Map<String, String> currentResult, double workTime) {
         try {
             StringBuilder content = new StringBuilder();
             content.append("{\n");
@@ -96,29 +82,14 @@ public class HitCheckFCGIServer {
             content.append("    \"x\": \"").append((String)currentResult.get("x")).append("\",\n");
             content.append("    \"y\": \"").append((String)currentResult.get("y")).append("\",\n");
             content.append("    \"hit\": ").append((String)currentResult.get("hit")).append(",\n");
-            content.append("    \"timestamp\": \"").append((String)currentResult.get("timestamp")).append("\"\n");
+            content.append("    \"timestamp\": \"").append((String)currentResult.get("timestamp")).append("\",\n");
+            // WorkTime с полной точностью (без форматирования)
+            content.append("    \"workTime\": ").append(workTime).append("\n");
             content.append("  },\n");
-            content.append("  \"history\": [\n");
-            synchronized(queue) {
-                for(Iterator<Map<String, String>> iterator = queue.iterator(); iterator.hasNext(); content.append("\n")) {
-                    Map<String, String> result = (Map)iterator.next();
-                    content.append("    {\n");
-                    content.append("      \"r\": \"").append((String)result.get("r")).append("\",\n");
-                    content.append("      \"x\": \"").append((String)result.get("x")).append("\",\n");
-                    content.append("      \"y\": \"").append((String)result.get("y")).append("\",\n");
-                    content.append("      \"hit\": ").append((String)result.get("hit")).append(",\n");
-                    content.append("      \"timestamp\": \"").append((String)result.get("timestamp")).append("\"\n");
-                    content.append("    }");
-                    if (iterator.hasNext()) {
-                        content.append(",");
-                    }
-                }
-            }
-
-            content.append("  ],\n");
-            content.append("  \"workTime\": \"").append(String.format(Locale.US, "%.2f", (double)(System.nanoTime() - startTime) / (double)1000000.0F)).append("\",\n");
+            // Убрана history
             content.append("  \"error\": \"all ok\"\n");
             content.append("}");
+
             String contentStr = content.toString();
             byte[] contentBytes = contentStr.getBytes(StandardCharsets.UTF_8);
             System.out.println("Content-Type: application/json; charset=utf-8");
@@ -130,7 +101,6 @@ public class HitCheckFCGIServer {
         } catch (Exception e) {
             System.err.println("Error sending response: " + e.getMessage());
         }
-
     }
 
     public static void sendError(String message) {
@@ -146,7 +116,6 @@ public class HitCheckFCGIServer {
         } catch (Exception e) {
             System.err.println("Error sending error response: " + e.getMessage());
         }
-
     }
 
     public static Map<String, String> parseQuery(String query) {
@@ -168,14 +137,14 @@ public class HitCheckFCGIServer {
     }
 
     private static boolean isTriangle(double x, double y, double r) {
-        return x >= (double)0.0F && x <= r && y >= (double)0.0F && y <= r / (double)2.0F && y >= x / (double)2.0F;
+        return x >= 0.0 && x <= r && y >= 0.0 && y <= r / 2.0 && y >= x / 2.0;
     }
 
     private static boolean isRect(double x, double y, double r) {
-        return x <= (double)0.0F && y >= (double)0.0F && x >= -r / (double)2.0F && y <= r;
+        return x <= 0.0 && y >= 0.0 && x >= -r / 2.0 && y <= r;
     }
 
     private static boolean isCircle(double x, double y, double r) {
-        return x >= (double)0.0F && x <= r / (double)2.0F && y <= (double)0.0F && y >= -r / (double)2.0F && x * x + y * y <= r / (double)2.0F * r / (double)2.0F;
+        return x >= 0.0 && y <= 0.0 && x * x + y * y <= r / 2.0 * r / 2.0;
     }
 }
